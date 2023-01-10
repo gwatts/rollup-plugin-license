@@ -323,9 +323,15 @@ class LicensePlugin {
       return;
     }
 
+    const alwaysInclude = thirdParty.alwaysInclude;
+    if (alwaysInclude) {
+      const entries = _.isFunction(alwaysInclude) ? alwaysInclude() : alwaysInclude;
+      entries.forEach((path) => this.scanDependency(path));
+    }
+
     const includePrivate = thirdParty.includePrivate || false;
     const includeSelf = thirdParty.includeSelf || false;
-    const outputDependencies = [...this._dependencies.values()].filter((dependency) => {
+    let outputDependencies = [...this._dependencies.values()].filter((dependency) => {
       if (dependency.self && includeSelf) {
         return true;
       }
@@ -342,8 +348,13 @@ class LicensePlugin {
       return;
     }
 
-    const { allow, output } = thirdParty;
+    const { allow, output, filter } = thirdParty;
 
+    if (filter) {
+      outputDependencies = filter(outputDependencies);
+    }
+
+    const allow = thirdParty.allow;
     if (allow) {
       this._scanLicenseViolations(outputDependencies, allow);
     }
