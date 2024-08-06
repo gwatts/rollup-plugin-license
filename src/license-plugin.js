@@ -323,10 +323,10 @@ class LicensePlugin {
       return;
     }
 
-    const alwaysInclude = thirdParty.alwaysInclude;
+    const { alwaysInclude } = thirdParty;
     if (alwaysInclude) {
       const entries = _.isFunction(alwaysInclude) ? alwaysInclude() : alwaysInclude;
-      entries.forEach((path) => this.scanDependency(path));
+      entries.forEach((entryPath) => this.scanDependency(entryPath));
     }
 
     const includePrivate = thirdParty.includePrivate || false;
