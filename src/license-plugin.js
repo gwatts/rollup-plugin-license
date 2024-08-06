@@ -354,7 +354,6 @@ class LicensePlugin {
       outputDependencies = filter(outputDependencies);
     }
 
-    const allow = thirdParty.allow;
     if (allow) {
       this._scanLicenseViolations(outputDependencies, allow);
     }
